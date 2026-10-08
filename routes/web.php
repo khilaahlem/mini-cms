@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Event\Runtime\PHP;
 
 Route::get('/', function () {
     return view('welcome');
@@ -14,8 +15,14 @@ Route::get('/bonjour-court', fn () => 'Même résultat, écrit avec une fonction
 
 Route::get('/bienvenue', function () {
     return view('bienvenue', [
-        'etudiant' => 'Prenom Nom',
+        'etudiant' => 'ahlem khila',
         'groupe' => 'MDW32',
         'cours' => 'Atelier Framework Côté Serveur',
     ]);
+});
+Route::get('/version',function(){
+    return app()->version() . '-PHP'.PHP_VERSION;
+});
+Route::get('/heure',function(){
+    return now()->format('H:i:s').'-'.now()->format('d/m/Y');
 });
