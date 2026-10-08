@@ -26,3 +26,9 @@ Route::get('/version',function(){
 Route::get('/heure',function(){
     return now()->format('H:i:s').'-'.now()->format('d/m/Y');
 });
+Route::get('/a-propos', function () {
+    return view('a-propos', [
+        'auteur' => 'Prenom Nom',
+        'groupe' => 'MDW32',
+    ]);
+});
