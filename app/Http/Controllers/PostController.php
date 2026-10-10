@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Http\Controllers;
+
 class PostController extends Controller
 {
     private function posts(): array
@@ -28,6 +30,32 @@ class PostController extends Controller
         return view('posts.index', [
             'heading' => 'Tous les articles',
             'posts' => $this->posts(),
+        ]);
+    }
+
+    public function archive(string $year)
+    {
+        $posts = array_filter(
+            $this->posts(),
+            fn (array $post) => $post['year'] === (int) $year
+        );
+
+        return view('posts.index', [
+            'heading' => 'Articles de '.$year,
+            'posts' => $posts,
+        ]);
+    }
+
+    public function show(string $slug)
+    {
+        $posts = $this->posts();
+
+        if (! array_key_exists($slug, $posts)) {
+            abort(404);
+        }
+
+        return view('posts.show', [
+            'post' => $posts[$slug],
         ]);
     }
 }
