@@ -49,3 +49,26 @@ it('shows the create form', function () {
         ->assertOk()
         ->assertSee('Nouvel article');
 });
+
+it('shows only published posts on the home page', function () {
+    Post::create([
+        'title' => 'Article publié',
+        'slug' => 'article-publie',
+        'body' => 'Contenu du premier article publié.',
+        'is_published' => true,
+        'published_at' => now(),
+    ]);
+
+    Post::create([
+        'title' => 'Article brouillon',
+        'slug' => 'article-brouillon',
+        'body' => 'Contenu du brouillon qui ne doit pas être affiché.',
+        'is_published' => false,
+        'published_at' => null,
+    ]);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('Article publié')
+        ->assertDontSee('Article brouillon');
+});
