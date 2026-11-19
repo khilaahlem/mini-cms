@@ -88,3 +88,41 @@ it('counts the published posts of each category on the home page', function () {
         ->assertOk()
         ->assertSee('Tutoriels (2)');
 });
+
+it('lists the published posts of a tag by its slug', function () {
+    $tag = Tag::factory()->create(['name' => 'Laravel', 'slug' => 'laravel']);
+    $published = Post::factory()->published()->create(['title' => 'Article avec tag']);
+    $draft = Post::factory()->create(['title' => 'Brouillon avec tag']);
+    $other = Post::factory()->published()->create(['title' => 'Article sans tag']);
+
+    $published->tags()->attach($tag);
+    $draft->tags()->attach($tag);
+
+    $this->get('/posts/tag/laravel')
+        ->assertOk()
+        ->assertSee('Article avec tag')
+        ->assertDontSee('Brouillon avec tag')
+        ->assertDontSee('Article sans tag');
+});
+
+it('returns 404 for an unknown tag slug', function () {
+    $this->get('/posts/tag/inconnu')->assertNotFound();
+});
+
+it('shows popular tags with at least one published post on the home page', function () {
+    $activeTag = Tag::factory()->create(['name' => 'Actif']);
+    $draftTag = Tag::factory()->create(['name' => 'Brouillons']);
+
+    $post1 = Post::factory()->published()->create();
+    $post2 = Post::factory()->published()->create();
+    $draftPost = Post::factory()->create();
+
+    $activeTag->posts()->attach([$post1->id, $post2->id]);
+    $draftTag->posts()->attach($draftPost->id);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('Actif (2)')
+        ->assertDontSee('Brouillons');
+});
+

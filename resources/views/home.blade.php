@@ -20,6 +20,17 @@
         @endforeach
     </ul>
 
+    @if ($tags->isNotEmpty())
+        <h2 class="text-2xl font-bold mb-4">Tags populaires</h2>
+        <ul class="mb-10 flex flex-wrap gap-2" aria-label="Tags populaires">
+            @foreach ($tags as $tag)
+                <li>
+                    <a href="{{ route('posts.tag', $tag) }}" class="inline-block rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 hover:bg-indigo-100">{{ $tag->name }} ({{ $tag->posts_count }})</a>
+                </li>
+            @endforeach
+        </ul>
+    @endif
+
     <section class="mt-8">
         <h2 class="text-2xl font-bold mb-6">Derniers articles publiés</h2>
 
