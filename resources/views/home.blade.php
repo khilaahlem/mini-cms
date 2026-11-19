@@ -20,28 +20,15 @@
         @endforeach
     </ul>
 
-    @if ($tags->isNotEmpty())
-        <h2 class="text-2xl font-bold mb-4">Tags populaires</h2>
-        <ul class="mb-10 flex flex-wrap gap-2" aria-label="Tags populaires">
-            @foreach ($tags as $tag)
-                <li>
-                    <a href="{{ route('posts.tag', $tag) }}" class="inline-block rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 hover:bg-indigo-100">{{ $tag->name }} ({{ $tag->posts_count }})</a>
-                </li>
-            @endforeach
-        </ul>
-    @endif
+    <h2 class="text-2xl font-bold mb-4">Derniers articles publiés</h2>
 
-    <section class="mt-8">
-        <h2 class="text-2xl font-bold mb-6">Derniers articles publiés</h2>
-
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            @forelse ($latestPosts as $post)
-                <x-post-card :post="$post" />
-            @empty
-                <x-alert type="info" title="Aucun article">
-                    Il n'y a pas encore d'article publié.
-                </x-alert>
-            @endforelse
-        </div>
-    </section>
+    <div class="grid gap-6 md:grid-cols-2">
+        @forelse ($latestPosts as $post)
+            <x-post-card :post="$post" />
+        @empty
+            <x-alert type="info" title="Aucun article publié" class="md:col-span-2">
+                Les articles publiés apparaîtront ici.
+            </x-alert>
+        @endforelse
+    </div>
 </x-layout>
